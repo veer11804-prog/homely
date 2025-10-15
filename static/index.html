@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Homely - Static</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind CDN config (keep minimal; we rely mostly on utilities)
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --font-sans: 'Inter', 'Poppins', sans-serif;
+      --color-primary: #008080; /* teal */
+      --color-secondary: #ff9800; /* orange */
+      --color-dark: #263238; /* dark blue-gray */
+      --color-light: #f5f7fa; /* light gray */
+      --color-accent: #1976d2; /* blue */
+      --color-bg: #e3f2fd; /* very light blue */
+      --color-frenchRose: #D72660;
+      --color-antiqueRose: #C08081;
+      --color-mistflower: #000000;
+      --color-orchidSmoke: #EDDDEC;
+      --color-vainillaSuede: #d9dae9;
+    }
+
+    html, body { height: 100%; }
+    body {
+      font-family: var(--font-sans);
+      color: #333;
+      background: var(--color-bg);
+    }
+
+    /* Utilities mapped from the React app's custom classes */
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 0.5rem; font-weight: 600;
+      background: var(--color-primary); color: #fff; border: 1px solid var(--color-primary);
+      padding: 0.5rem 1rem; transition: all 150ms ease;
+      box-shadow: 0 1px 2px rgba(16,24,40,0.06), 0 1px 3px rgba(16,24,40,0.1);
+    }
+    .btn-primary:hover { background: rgba(0,128,128,0.73); border-color: rgba(0,128,128,0.73); }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-primary:focus { outline: 2px solid rgba(0,128,128,0.4); outline-offset: 1px; }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 0.5rem; font-weight: 600;
+      background: var(--color-primary); color: #fff; border: 1px solid var(--color-primary);
+      padding: 0.5rem 1rem; transition: all 150ms ease;
+      box-shadow: 0 1px 2px rgba(16,24,40,0.06), 0 1px 3px rgba(16,24,40,0.1);
+    }
+    .btn-secondary:hover { background: rgba(0,128,128,0.73); border-color: rgba(0,128,128,0.73); }
+    .btn-secondary:active { transform: scale(0.97); }
+
+    .btn-active { background: var(--color-primary) !important; color: #fff !important; border-color: var(--color-primary) !important; }
+
+    .card {
+      border-radius: 0.75rem; background: var(--color-light); padding: 1rem;
+      box-shadow: 0 1px 2px rgba(16,24,40,0.06), 0 1px 3px rgba(16,24,40,0.1);
+      border: 1px solid rgba(227, 242, 253, 0.6);
+    }
+    .card:hover { background: #e0f7fa; }
+
+    .input, .select, .textarea {
+      width: 100%; min-width: 0; border-radius: 0.5rem; background: var(--color-bg);
+      padding: 0.5rem 0.75rem; color: #333; border: 1px solid var(--color-bg);
+      transition: all 150ms ease; font-size: 1rem;
+    }
+    .input:focus, .select:focus, .textarea:focus { outline: 2px solid rgba(0,128,128,0.4); outline-offset: 1px; }
+
+    .bg-vainillaSuede { background: var(--color-vainillaSuede); }
+    .text-frenchRose { color: var(--color-frenchRose); }
+
+    .badge {
+      display: inline-block; font-size: 0.75rem; padding: 0.125rem 0.5rem;
+      border-radius: 0.375rem; color: #374151; background: rgba(217,218,233,0.8);
+    }
+
+    .carousel { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; }
+    .carousel > * { scroll-snap-align: start; }
+
+    @keyframes gentle-bounce { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+
+    .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <!-- Header -->
+  <header id="site-header" class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b">
+    <div class="mx-auto w-full max-w-7xl px-4 py-3">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <button id="menuToggle" aria-label="Toggle menu" class="sm:hidden inline-flex h-10 w-10 items-center justify-center rounded-md border text-gray-700 hover:text-frenchRose">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+          </button>
+          <a href="#home" class="text-2xl font-bold" style="color: var(--color-primary)">Homely</a>
+        </div>
+        <nav class="hidden sm:flex items-center gap-4 text-gray-700">
+          <a href="#home" class="hover:text-[var(--color-primary)] transition">Home</a>
+          <a href="#listings" class="hover:text-[var(--color-primary)] transition">Explore</a>
+          <a href="#rent" class="hover:text-[var(--color-primary)] transition" data-type="rent">Rent</a>
+          <a href="#buy" class="hover:text-[var(--color-primary)] transition" data-type="buy">Buy</a>
+          <a href="#create" class="hover:text-[var(--color-primary)] transition">Post</a>
+          <a href="#contact" class="hover:text-[var(--color-primary)] transition">Contact</a>
+        </nav>
+        <div class="hidden sm:flex items-center gap-2">
+          <button class="btn-secondary px-3 py-2">Login</button>
+          <button class="btn-primary px-3 py-2">Sign Up</button>
+        </div>
+      </div>
+      <div id="mobileMenu" class="sm:hidden hidden mt-3 border-t pt-3">
+        <div class="flex flex-col gap-2">
+          <a href="#home" class="text-gray-700">Home</a>
+          <a href="#listings" class="text-gray-700">Explore</a>
+          <a href="#rent" class="text-gray-700" data-type="rent">Rent</a>
+          <a href="#buy" class="text-gray-700" data-type="buy">Buy</a>
+          <a href="#create" class="text-gray-700">Post</a>
+          <a href="#contact" class="text-gray-700">Contact</a>
+          <div class="flex items-center gap-2 pt-2">
+            <button class="btn-secondary flex-1 px-3 py-2 text-center">Login</button>
+            <button class="btn-primary flex-1 px-3 py-2 text-center">Sign Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1" id="home">
+    <div class="mx-auto w-full max-w-7xl px-3 sm:px-4 py-4 sm:py-6">
+      <!-- Hero -->
+      <section class="rounded-2xl bg-gradient-to-b from-[var(--color-bg)] to-white p-6 sm:p-10 card" style="border-color: rgba(227,242,253,0.6)">
+        <div class="max-w-3xl">
+          <h1 class="text-3xl sm:text-4xl font-bold mb-2" style="color: var(--color-mistflower)">Find Your Next Home</h1>
+          <p class="mb-6" style="color: var(--color-mistflower)">Rent, buy, or list your property with ease.</p>
+          <form id="heroSearchForm" class="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-white p-3 rounded-xl shadow">
+            <input id="heroLocation" class="input" placeholder="Location" />
+            <select id="heroType" class="select">
+              <option value="">Property Type</option>
+              <option value="room">Room</option>
+              <option value="apartment">Flat</option>
+              <option value="house">House</option>
+              <option value="pg">PG</option>
+            </select>
+            <input id="heroMaxPrice" class="input" placeholder="Max Price" />
+            <button class="btn-primary">Search</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Featured -->
+      <section class="space-y-4 mt-10" id="featured">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">Featured Properties</h2>
+          <a href="#listings" class="hover:underline" style="color: var(--color-primary)">See all</a>
+        </div>
+        <div id="featuredGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+      </section>
+
+      <!-- Categories -->
+      <section class="space-y-4 mt-10">
+        <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">Browse by Category</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="categories"></div>
+      </section>
+
+      <!-- Listings and Filters -->
+      <section id="listings" class="space-y-4 mt-12">
+        <div class="mb-2 text-xl font-semibold" style="color: var(--color-primary)">Explore Listings</div>
+        <form id="filtersForm" class="mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 bg-white p-4 rounded-xl shadow">
+          <input type="text" id="filterSearch" class="input" placeholder="Search by keyword..." />
+          <select id="filterCity" class="select"></select>
+          <input type="number" id="filterMin" class="input" placeholder="Min Price" />
+          <input type="number" id="filterMax" class="input" placeholder="Max Price" />
+          <div class="sm:col-span-2 md:col-span-4 flex gap-2">
+            <select id="filterType" class="select max-w-[220px]">
+              <option value="">Any Type</option>
+              <option value="room">Room</option>
+              <option value="apartment">Flat</option>
+              <option value="house">House</option>
+              <option value="studio">Studio</option>
+              <option value="villa">Villa</option>
+              <option value="shared">Shared</option>
+            </select>
+            <button type="submit" class="btn-primary">Apply</button>
+            <button type="button" id="resetFilters" class="btn-secondary">Reset</button>
+          </div>
+        </form>
+        <div id="listingsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        <div id="noResults" class="hidden text-center text-gray-500 py-12">No listings found. Try adjusting your filters.</div>
+      </section>
+
+      <!-- Testimonials -->
+      <section class="space-y-4 mt-12" id="testimonials">
+        <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">What users say</h2>
+        <div class="rounded-2xl py-6 px-2 sm:px-6 bg-white/60">
+          <div id="testimonialsCarousel" class="carousel scrollbar-hide pb-2 px-4"></div>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full mt-12" id="contact">
+        <form class="lg:col-span-2 space-y-4 p-4 rounded-2xl bg-vainillaSuede border border-[rgba(217,218,233,0.6)] shadow">
+          <h2 class="text-2xl font-semibold text-gray-800">Contact us</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm text-gray-700 mb-1">Name</label>
+              <input class="input" placeholder="Your name" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-700 mb-1">Email</label>
+              <input class="input" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-700 mb-1">Message</label>
+            <textarea class="textarea" rows="5" placeholder="How can we help?"></textarea>
+          </div>
+          <button class="btn-primary">Send</button>
+        </form>
+        <aside class="space-y-4">
+          <div class="card flex items-center gap-3">
+            <img src="https://placehold.co/32x32" alt="Contact" class="h-8 w-8 rounded-full object-cover" />
+            <div>
+              <div class="font-medium">Contact info</div>
+              <div class="text-sm text-gray-700">Email: support@example.com</div>
+              <div class="text-sm text-gray-700">Phone: +91 90000 00000</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="text-sm text-gray-600 mb-2">Map</div>
+            <div class="aspect-video rounded bg-gray-200/70 flex items-center justify-center overflow-hidden">
+              <img src="https://placehold.co/400x225" alt="Map" class="w-full h-full object-cover" />
+            </div>
+          </div>
+          <div class="card">
+            <div class="font-medium mb-1">Office Hours</div>
+            <div class="text-sm text-gray-700">Mon-Fri: 9am - 6pm</div>
+            <div class="text-sm text-gray-700">Sat: 10am - 2pm</div>
+          </div>
+          <div class="card">
+            <div class="font-medium mb-1">Feedback</div>
+            <p class="text-sm text-gray-700">We value your feedback! <a href="mailto:feedback@example.com" class="text-frenchRose">Send us your thoughts.</a></p>
+          </div>
+        </aside>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t shadow-sm mt-auto">
+    <div class="mx-auto w-full max-w-7xl px-4 py-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div>
+          <div class="font-bold text-lg mb-2" style="color: var(--color-primary)">Homely</div>
+          <div class="text-gray-700 mb-2">Find your next home with ease.</div>
+          <div class="flex gap-3 mt-4 text-gray-400">
+            <a href="#" aria-label="Twitter" class="hover:text-frenchRose transition">T</a>
+            <a href="#" aria-label="Instagram" class="hover:text-frenchRose transition">I</a>
+            <a href="#" aria-label="Facebook" class="hover:text-frenchRose transition">F</a>
+          </div>
+        </div>
+        <div>
+          <div class="font-semibold mb-2 text-gray-800">Explore</div>
+          <ul class="space-y-1">
+            <li><a href="#listings" class="hover:text-frenchRose transition">All Listings</a></li>
+            <li><a href="#listings" data-type="room" class="hover:text-frenchRose transition type-link">Rooms</a></li>
+            <li><a href="#listings" data-type="apartment" class="hover:text-frenchRose transition type-link">Flats</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-semibold mb-2 text-gray-800">Company</div>
+          <ul class="space-y-1">
+            <li><a href="#about" class="hover:text-frenchRose transition">About</a></li>
+            <li><a href="#contact" class="hover:text-frenchRose transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-semibold mb-2 text-gray-800">Legal</div>
+          <ul class="space-y-1">
+            <li><a href="#privacy" class="hover:text-frenchRose transition">Privacy</a></li>
+            <li><a href="#terms" class="hover:text-frenchRose transition">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-8 text-center text-gray-500 text-xs">
+        © <span id="year"></span> <span class="font-semibold" style="color: var(--color-primary)">Homely</span>. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Data: mock listings
+    const mockListings = [
+      {
+        id: '1', ownerId: 'u1', title: 'Sunny Room in Shared Apartment',
+        description: 'Bright and cozy room with plenty of natural light. Includes AC, high-speed WiFi, and free parking. Located near the local market and metro station.',
+        type: 'room', price: 20000, currency: 'INR', address: 'Andheri', city: 'Mumbai',
+        bedrooms: 1, bathrooms: 1, amenities: ['AC','Wifi','Parking'], status: 'published',
+        createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+        images: ['https://placehold.co/600x400?text=Room+1','https://placehold.co/600x400?text=Living+Area','https://placehold.co/600x400?text=Kitchen']
+      },
+      {
+        id: '2', ownerId: 'u2', title: '2 Bed Flat Near Downtown',
+        description: 'Spacious 2BHK apartment close to transport and shopping. Fully furnished with modern kitchen and balcony view.',
+        type: 'apartment', price: 85000, currency: 'INR', address: 'Koramangala', city: 'Bangalore',
+        bedrooms: 2, bathrooms: 2, amenities: ['AC','Wifi','Balcony','Furnished'], status: 'published',
+        createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+        images: ['https://placehold.co/600x400?text=Apartment+Front','https://placehold.co/600x400?text=Living+Room','https://placehold.co/600x400?text=Bedroom']
+      },
+      {
+        id: '3', ownerId: 'u3', title: 'Luxury Villa with Private Pool',
+        description: 'Premium 4BHK villa featuring a private pool, garden, and home theater. Located in a serene gated community.',
+        type: 'villa', price: 250000, currency: 'INR', address: 'Jubilee Hills', city: 'Hyderabad',
+        bedrooms: 4, bathrooms: 4, amenities: ['Pool','Garden','Home Theater','Parking','AC','Wifi'], status: 'published',
+        createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+        images: ['https://placehold.co/600x400?text=Villa+Exterior','https://placehold.co/600x400?text=Pool+Area','https://placehold.co/600x400?text=Living+Room','https://placehold.co/600x400?text=Bedroom']
+      },
+      {
+        id: '4', ownerId: 'u4', title: 'Cozy Studio Apartment',
+        description: 'Compact and modern studio perfect for students or working professionals. Includes WiFi and housekeeping service.',
+        type: 'studio', price: 18000, currency: 'INR', address: 'Viman Nagar', city: 'Pune',
+        bedrooms: 1, bathrooms: 1, amenities: ['Wifi','Housekeeping','Furnished'], status: 'published',
+        createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+        images: ['https://placehold.co/600x400?text=Studio+Interior','https://placehold.co/600x400?text=Kitchenette']
+      },
+      {
+        id: '5', ownerId: 'u5', title: 'Beachfront Cottage',
+        description: 'Relaxing 2BHK cottage with a direct sea view. Includes private patio and barbecue area. Ideal for weekend getaways.',
+        type: 'house', price: 120000, currency: 'INR', address: 'Calangute', city: 'Goa',
+        bedrooms: 2, bathrooms: 2, amenities: ['Sea View','Patio','BBQ Area','Wifi','Parking'], status: 'published',
+        createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+        images: ['https://placehold.co/600x400?text=Cottage+Front','https://placehold.co/600x400?text=Sea+View','https://placehold.co/600x400?text=Patio']
+      }
+    ];
+
+    function getListings() {
+      try {
+        const stored = localStorage.getItem('listings');
+        if (stored) return JSON.parse(stored);
+      } catch (_) { /* ignore */ }
+      return [...mockListings];
+    }
+
+    function renderCard(listing, idx) {
+      const img = (listing.images && listing.images.length) ? listing.images[0] : `https://source.unsplash.com/400x225/?house,interior,modern,architecture,realestate&sig=${idx}`;
+      return `
+        <div class="card hover:-translate-y-0.5 hover:shadow-lg transition">
+          <div class="aspect-video rounded-lg overflow-hidden mb-3 flex items-center justify-center bg-gray-200/60">
+            <img src="${img}" alt="${listing.title}" class="w-full h-full object-cover" />
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="text-lg font-semibold text-gray-800">${listing.currency} ${Number(listing.price).toLocaleString()}</div>
+            <div class="badge">${listing.city}</div>
+          </div>
+          <div class="text-sm text-gray-600">${listing.title}</div>
+          <div class="mt-3 flex gap-2">
+            <button class="btn-secondary flex-1" data-action="view" data-id="${listing.id}">View</button>
+            <button class="btn-primary flex-1" data-action="contact" data-id="${listing.id}">Contact</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGrid(container, items) {
+      container.innerHTML = items.map((l, i) => renderCard(l, i)).join('');
+    }
+
+    function uniqueCities(listings) {
+      return Array.from(new Set(listings.map(l => l.city))).sort();
+    }
+
+    function populateCitiesSelect(listings) {
+      const sel = document.getElementById('filterCity');
+      sel.innerHTML = '<option value="">All Cities</option>' + uniqueCities(listings).map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+
+    function applyFilters(listings, filters) {
+      const search = filters.search?.toLowerCase() || '';
+      return listings.filter(l => {
+        const matchesSearch = search ? (l.title.toLowerCase().includes(search) || l.description.toLowerCase().includes(search)) : true;
+        const matchesCity = filters.city ? l.city.toLowerCase() === filters.city.toLowerCase() : true;
+        const matchesMin = filters.min ? Number(l.price) >= Number(filters.min) : true;
+        const matchesMax = filters.max ? Number(l.price) <= Number(filters.max) : true;
+        const matchesType = filters.type ? String(l.type).toLowerCase() === String(filters.type).toLowerCase() : true;
+        return matchesSearch && matchesCity && matchesMin && matchesMax && matchesType;
+      });
+    }
+
+    function initCategories() {
+      const cats = [
+        { key: 'room', label: 'Room', icon: '🛏️' },
+        { key: 'apartment', label: 'Flat', icon: '🏢' },
+        { key: 'house', label: 'House', icon: '🏠' },
+        { key: 'pg', label: 'PG', icon: '👥' },
+        { key: 'rent', label: 'Rent', icon: '💸' },
+        { key: 'buy', label: 'Buy', icon: '🛒' },
+      ];
+      const wrap = document.getElementById('categories');
+      wrap.innerHTML = cats.map(c => `
+        <a href="#listings" data-type="${c.key}" class="card text-center hover:-translate-y-0.5 transition type-link">
+          <div class="text-3xl mb-2" style="animation: gentle-bounce 1.2s infinite">${c.icon}</div>
+          <div class="font-medium">${c.label}</div>
+        </a>
+      `).join('');
+    }
+
+    function initTestimonials() {
+      const testimonials = [
+        { id: 1, name: 'Ayesha', text: 'Found the perfect flat in a week!', avatar: 'A' },
+        { id: 2, name: 'Omar', text: 'Smooth experience and great support.', avatar: 'O' },
+        { id: 3, name: 'Sara', text: 'Loved the filters and map view.', avatar: 'S' },
+        { id: 4, name: 'Ravi', text: 'Listed my property easily and got quick responses.', avatar: 'R' },
+        { id: 5, name: 'Mina', text: 'A must-use platform for renters!', avatar: 'M' },
+        { id: 6, name: 'Lina', text: 'The best place to find affordable housing.', avatar: 'L' },
+        { id: 7, name: 'Raj', text: 'User-friendly and efficient.', avatar: 'R' },
+        { id: 8, name: 'Nina', text: 'Highly recommend for both renters and owners.', avatar: 'N' },
+        { id: 9, name: 'Sam', text: 'Great variety of listings.', avatar: 'S' },
+        { id: 10, name: 'Tina', text: 'Excellent customer service.', avatar: 'T' },
+      ];
+      const el = document.getElementById('testimonialsCarousel');
+      el.innerHTML = testimonials.map(t => `
+        <div class="min-w-[260px] sm:min-w-[320px] card bg-white/80">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="h-10 w-10 rounded-full flex items-center justify-center font-semibold text-white" style="background: var(--color-primary)">${t.avatar}</div>
+            <div class="font-medium">${t.name}</div>
+          </div>
+          <p class="text-gray-700">${t.text}</p>
+        </div>
+      `).join('');
+      // Auto-scroll
+      setInterval(() => {
+        const cardWidth = el.firstElementChild ? el.firstElementChild.getBoundingClientRect().width + 16 : 260;
+        if (Math.ceil(el.scrollLeft + el.clientWidth) >= el.scrollWidth) {
+          el.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          el.scrollBy({ left: cardWidth, behavior: 'smooth' });
+        }
+      }, 2500);
+    }
+
+    function wireInteractions(allListings) {
+      const featured = allListings.slice(0, 8);
+      const featuredGrid = document.getElementById('featuredGrid');
+      renderGrid(featuredGrid, featured);
+
+      const listingsGrid = document.getElementById('listingsGrid');
+      const noResults = document.getElementById('noResults');
+
+      // Populate cities
+      populateCitiesSelect(allListings);
+
+      // Default render
+      renderGrid(listingsGrid, allListings);
+
+      const filtersForm = document.getElementById('filtersForm');
+      const filterSearch = document.getElementById('filterSearch');
+      const filterCity = document.getElementById('filterCity');
+      const filterMin = document.getElementById('filterMin');
+      const filterMax = document.getElementById('filterMax');
+      const filterType = document.getElementById('filterType');
+
+      function onApply(e) {
+        e && e.preventDefault && e.preventDefault();
+        const filters = {
+          search: filterSearch.value.trim(),
+          city: filterCity.value,
+          min: filterMin.value,
+          max: filterMax.value,
+          type: filterType.value,
+        };
+        const items = applyFilters(allListings, filters);
+        renderGrid(listingsGrid, items);
+        noResults.classList.toggle('hidden', items.length !== 0);
+      }
+
+      filtersForm.addEventListener('submit', onApply);
+      document.getElementById('resetFilters').addEventListener('click', () => {
+        filterSearch.value = '';
+        filterCity.value = '';
+        filterMin.value = '';
+        filterMax.value = '';
+        filterType.value = '';
+        renderGrid(listingsGrid, allListings);
+        noResults.classList.add('hidden');
+      });
+
+      // Hero search -> prefill filters and scroll
+      document.getElementById('heroSearchForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        filterCity.value = document.getElementById('heroLocation').value;
+        filterType.value = document.getElementById('heroType').value;
+        filterMax.value = document.getElementById('heroMaxPrice').value;
+        document.getElementById('filterSearch').value = '';
+        onApply();
+        document.getElementById('listings').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // Category and footer type links
+      function handleTypeLinkClick(e) {
+        const type = e.currentTarget.getAttribute('data-type');
+        if (!type) return;
+        filterType.value = type;
+        onApply(e);
+        document.getElementById('listings').scrollIntoView({ behavior: 'smooth' });
+      }
+      document.querySelectorAll('.type-link, [data-type]')?.forEach(a => {
+        a.addEventListener('click', (e) => {
+          // Only hijack if element has data-type
+          if (a.hasAttribute('data-type')) {
+            e.preventDefault();
+            handleTypeLinkClick(e);
+          }
+        });
+      });
+
+      // Simple view/contact actions (alerts for demo)
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const id = btn.getAttribute('data-id');
+        const listing = allListings.find(l => String(l.id) === String(id));
+        if (!listing) return;
+        if (btn.dataset.action === 'view') {
+          alert(`${listing.title} - ${listing.currency} ${Number(listing.price).toLocaleString()} in ${listing.city}`);
+        } else if (btn.dataset.action === 'contact') {
+          alert(`Contact host for ${listing.title}`);
+        }
+      });
+    }
+
+    // Mobile menu
+    function initMenu() {
+      const toggle = document.getElementById('menuToggle');
+      const menu = document.getElementById('mobileMenu');
+      toggle?.addEventListener('click', () => menu.classList.toggle('hidden'));
+      menu?.querySelectorAll('a')?.forEach(a => a.addEventListener('click', () => menu.classList.add('hidden')));
+
+      // Add subtle shadow when scrolled
+      const header = document.getElementById('site-header');
+      const onScroll = () => {
+        if (window.scrollY > 4) {
+          header.classList.add('shadow-sm');
+          header.classList.remove('border-b');
+        } else {
+          header.classList.remove('shadow-sm');
+          header.classList.add('border-b');
+        }
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll);
+    }
+
+    // Boot
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initMenu();
+    initCategories();
+    initTestimonials();
+    const listings = getListings();
+    wireInteractions(listings);
+  </script>
+</body>
+</html>
