@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homely</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+<body class="bg-vainillaSuede">
+  <div class="min-h-screen flex flex-col">
+    <header class="site-header">
+      <div class="mx-auto w-full max-w-7xl px-4 py-3">
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <a href="/home.html" class="text-2xl font-bold text-[var(--color-primary)] tracking-tight">Homely</a>
+          </div>
+          <nav class="hidden sm:flex items-center gap-4">
+            <a href="/home.html" class="text-gray-700 hover:text-[var(--color-primary)] transition">Home</a>
+            <a href="/lisitinig.html" class="text-gray-700 hover:text-[var(--color-primary)] transition">Explore</a>
+            <a href="/search.html?type=rent" class="text-gray-700 hover:text-[var(--color-primary)] transition">Rent</a>
+            <a href="/search.html?type=buy" class="text-gray-700 hover:text-[var(--color-primary)] transition">Buy</a>
+            <a href="/createlistinig.html" class="text-gray-700 hover:text-[var(--color-primary)] transition">Post</a>
+            <a href="/contact.html" class="text-gray-700 hover:text-[var(--color-primary)] transition">Contact</a>
+          </nav>
+          <div class="hidden sm:flex items-center gap-2">
+            <a href="/login.html" class="btn-secondary px-3 py-2">Login</a>
+            <a href="/signup.html" class="btn-primary px-3 py-2">Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <div class="mx-auto w-full max-w-7xl px-3 sm:px-4 py-4 sm:py-6">
+        <!-- PAGE_CONTENT -->
+      </div>
+    </main>
+
+    <footer class="bg-white border-t shadow-sm mt-auto">
+      <div class="mx-auto w-full max-w-7xl px-4 py-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div>
+            <div class="text-[var(--color-primary)] font-bold text-lg mb-2">Homely</div>
+            <div class="text-gray-700 mb-2">Find your next home with ease.</div>
+            <div class="flex gap-3 mt-4">
+              <a href="#" aria-label="Twitter" class="text-gray-400 hover:text-frenchRose transition">T</a>
+              <a href="#" aria-label="Instagram" class="text-gray-400 hover:text-frenchRose transition">I</a>
+              <a href="#" aria-label="Facebook" class="text-gray-400 hover:text-frenchRose transition">F</a>
+            </div>
+          </div>
+          <div>
+            <div class="font-semibold mb-2 text-gray-800">Explore</div>
+            <ul class="space-y-1">
+              <li><a href="/lisitinig.html" class="hover:text-frenchRose transition">All Listings</a></li>
+              <li><a href="/search.html?type=room" class="hover:text-frenchRose transition">Rooms</a></li>
+              <li><a href="/search.html?type=apartment" class="hover:text-frenchRose transition">Flats</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="font-semibold mb-2 text-gray-800">Company</div>
+            <ul class="space-y-1">
+              <li><a href="#" class="hover:text-frenchRose transition">About</a></li>
+              <li><a href="/contact.html" class="hover:text-frenchRose transition">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="font-semibold mb-2 text-gray-800">Legal</div>
+            <ul class="space-y-1">
+              <li><a href="#" class="hover:text-frenchRose transition">Privacy</a></li>
+              <li><a href="#" class="hover:text-frenchRose transition">Terms</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-8 text-center text-gray-500 text-xs">
+          © <span id="year"></span> <span class="text-[var(--color-primary)] font-semibold">Homely</span>. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module">
+    import { initHeader, setActiveNav } from '/assets/app.js';
+    initHeader();
+    setActiveNav(location.pathname);
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
