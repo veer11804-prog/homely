@@ -1,0 +1,1898 @@
+    export type ListingType = 'room' | 'shared' | 'apartment' | 'house' | 'studio'
+    export type ListingStatus = 'draft' | 'published' | 'archived' | 'rented' | 'sold'
+
+    export interface Listing {
+    id: string
+    ownerId: string
+    title: string
+    description: string
+    type: ListingType
+    price: number
+    currency: string
+    address: string
+    city: string
+    bedrooms: number
+    bathrooms: number
+    areaSqFt?: number
+    amenities: string[]
+    status: ListingStatus
+    createdAt: string
+    updatedAt: string
+    images: string[]
+    }
+    export const mockListings = [
+    {
+        id: '1',
+        ownerId: 'u1',
+        title: 'Sunny Room in Shared Apartment',
+        description:
+        'Bright and cozy room with plenty of natural light. Includes AC, high-speed WiFi, and free parking. Located near the local market and metro station.',
+        type: 'room',
+        price: 20000,
+        currency: 'INR',
+        address: 'Andheri',
+        city: 'Mumbai',
+        bedrooms: 1,
+        bathrooms: 1,
+        amenities: ['AC', 'Wifi', 'Parking'],
+        status: 'published',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        images: [
+        'https://placehold.co/600x400?text=Room+1',
+        'https://placehold.co/600x400?text=Living+Area',
+        'https://placehold.co/600x400?text=Kitchen',
+        ],
+    },
+    {
+        id: '2',
+        ownerId: 'u2',
+        title: '2 Bed Flat Near Downtown',
+        description:
+        'Spacious 2BHK apartment close to transport and shopping. Fully furnished with modern kitchen and balcony view.',
+        type: 'apartment',
+        price: 85000,
+        currency: 'INR',
+        address: 'Koramangala',
+        city: 'Bangalore',
+        bedrooms: 2,
+        bathrooms: 2,
+        amenities: ['AC', 'Wifi', 'Balcony', 'Furnished'],
+        status: 'published',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        images: [
+        'https://placehold.co/600x400?text=Apartment+Front',
+        'https://placehold.co/600x400?text=Living+Room',
+        'https://placehold.co/600x400?text=Bedroom',
+        ],
+    },
+    {
+        id: '3',
+        ownerId: 'u3',
+        title: 'Luxury Villa with Private Pool',
+        description:
+        'Premium 4BHK villa featuring a private pool, garden, and home theater. Located in a serene gated community.',
+        type: 'villa',
+        price: 250000,
+        currency: 'INR',
+        address: 'Jubilee Hills',
+        city: 'Hyderabad',
+        bedrooms: 4,
+        bathrooms: 4,
+        amenities: ['Pool', 'Garden', 'Home Theater', 'Parking', 'AC', 'Wifi'],
+        status: 'published',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        images: [
+        'https://placehold.co/600x400?text=Villa+Exterior',
+        'https://placehold.co/600x400?text=Pool+Area',
+        'https://placehold.co/600x400?text=Living+Room',
+        'https://placehold.co/600x400?text=Bedroom',
+        ],
+    },
+    {
+        id: '4',
+        ownerId: 'u4',
+        title: 'Cozy Studio Apartment',
+        description:
+        'Compact and modern studio perfect for students or working professionals. Includes WiFi and housekeeping service.',
+        type: 'studio',
+        price: 18000,
+        currency: 'INR',
+        address: 'Viman Nagar',
+        city: 'Pune',
+        bedrooms: 1,
+        bathrooms: 1,
+        amenities: ['Wifi', 'Housekeeping', 'Furnished'],
+        status: 'published',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        images: [
+        'https://placehold.co/600x400?text=Studio+Interior',
+        'https://placehold.co/600x400?text=Kitchenette',
+        ],
+    },
+    {
+        id: '5',
+        ownerId: 'u5',
+        title: 'Beachfront Cottage',
+        description:
+        'Relaxing 2BHK cottage with a direct sea view. Includes private patio and barbecue area. Ideal for weekend getaways.',
+        type: 'house',
+        price: 120000,
+        currency: 'INR',
+        address: 'Calangute',
+        city: 'Goa',
+        bedrooms: 2,
+        bathrooms: 2,
+        amenities: ['Sea View', 'Patio', 'BBQ Area', 'Wifi', 'Parking'],
+        status: 'published',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        images: [
+        'https://placehold.co/600x400?text=Cottage+Front',
+        'https://placehold.co/600x400?text=Sea+View',
+        'https://placehold.co/600x400?text=Patio',
+        ],
+    },
+    ]
+
+    // Helper to get listings from localStorage or fallback to mock
+    export function getListings() {
+    const stored = localStorage.getItem('listings')
+    if (stored) {
+        try {
+        return JSON.parse(stored)
+        } catch {
+        return mockListings
+        }
+    }
+    return mockListings
+    }
+
+    // Helper to save listings to localStorage
+    export function saveListings(listings: any[]) {
+    localStorage.setItem('listings', JSON.stringify(listings))
+    }
+    import './index.css';@import "tailwindcss";
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    @theme {
+    --font-sans: 'Inter', 'Poppins', sans-serif;
+    --color-primary: #008080; /* teal */
+    --color-secondary: #ff9800; /* orange */
+    --color-dark: #263238; /* dark blue-gray */
+    --color-light: #f5f7fa; /* light gray */
+    --color-accent: #1976d2; /* blue */
+    --color-bg: #e3f2fd; /* very light blue */
+    /* --color-frenchRose: #c11c84; */
+    /* --color-frenchRose: #F64A9A; */
+    --color-frenchRose: #D72660; /* updated to a vibrant, softer pink */
+    --color-antiqueRose: #C08081;
+    --color-mistflower: #000000;
+    --color-orchidSmoke: #EDDDEC;
+    /* --color-vainillaSuede: #E8D4C3; */
+    --color-vainillaSuede: #d9dae9;
+    }
+
+    /* @theme {
+    --font-sans: 'Inter', 'Poppins', sans-serif;
+    /* --color-frenchRose: #c11c84; */
+    /* --color-frenchRose: #F64A9A; */
+    /* --color-frenchRose: #8c271d;
+    --color-antiqueRose: #C08081;
+    --color-mistflower: #000000;
+    --color-orchidSmoke: #EDDDEC; */
+    /* --color-vainillaSuede: #E8D4C3; */
+    /* --color-vainillaSuede: #d9dae9; */
+    /* } */ 
+    @layer base {
+    html, body, #root {
+        @apply h-full min-h-screen;
+    }
+    body {
+        @apply font-sans text-[#333] bg-[var(--color-bg)];
+    }
+    h1, h2, h3, h4, h5, h6 {
+        @apply text-[var(--color-dark)];
+    }
+    }
+
+    @layer components { 
+    .btn-primary {
+        @apply inline-flex items-center justify-center rounded-lg font-semibold shadow transition-all duration-150
+        bg-[var(--color-primary)] text-white border border-[var(--color-primary)]
+        px-4 py-2 text-base w-full sm:w-auto
+        hover:bg-[#008080ba] hover:border-[#008080ba]
+        focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/40
+        active:scale-95
+        disabled:opacity-60 disabled:cursor-not-allowed;
+    }
+    .btn-secondary {
+        @apply inline-flex items-center justify-center rounded-lg font-semibold shadow transition-all duration-150
+        bg-[var(--color-primary)] text-white border border-[var(--color-primary)]
+        px-4 py-2 text-base w-full sm:w-auto
+        hover:bg-[#008080ba] hover:text-white hover:border-[#008080ba]
+        focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/40
+        active:scale-95
+        disabled:opacity-60 disabled:cursor-not-allowed;
+    }
+    .card {
+        @apply rounded-xl bg-[var(--color-light)] p-4 ring-1 ring-[var(--color-bg)]/60 shadow-2xl;
+        /* box-shadow: 0 0 16px 0 var(--color-frenchRose); */
+    }
+    .card:hover {
+        @apply bg-[#e0f7fa];
+    }
+    .input, .select, .textarea {
+        @apply w-full min-w-0 rounded-lg bg-[var(--color-bg)] px-3 py-2 text-[#333] border border-[var(--color-bg)]
+        focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]
+        text-base sm:text-base md:text-lg sm:px-4 sm:py-2.5
+        transition-all duration-150;
+    }
+    .alert-error {
+        @apply rounded-lg border border-[var(--color-secondary)] bg-[var(--color-secondary)]/15 text-[var(--color-secondary)] px-4 py-3;
+    }
+    .carousel {
+        @apply flex gap-4 overflow-x-auto snap-x snap-mandatory;
+    }
+    a, .hover-link {
+        @apply transition-colors duration-150;
+    }
+    a:hover, .hover-link:hover {
+        @apply text-white;
+    }
+    .hover-bg {
+        @apply transition-colors duration-150;
+    }
+    .hover-bg:hover {
+        background-color: #e0f7fa !important;
+    }
+    }
+
+    @keyframes gentle-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+    }
+
+    .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+    }
+    import { useEffect, useState } from 'react'
+    import { Outlet, NavLink } from 'react-router-dom'
+
+    function App() {
+    const [menuOpen, setMenuOpen] = useState(false)
+    const [scrolled, setScrolled] = useState(false)
+
+    useEffect(() => {
+        function onScroll() {
+        setScrolled(window.scrollY > 4)
+        }
+        onScroll()
+        window.addEventListener('scroll', onScroll)
+        return () => window.removeEventListener('scroll', onScroll)
+    }, [])
+
+    return (
+        <div className="min-h-screen flex flex-col bg-vainillaSuede">
+        <header className={`sticky top-0 z-30 bg-white/80 backdrop-blur ${scrolled ? 'shadow-sm' : 'border-b'}`}>
+            <div className="mx-auto w-full max-w-7xl px-4 py-3">
+            <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                <button
+                    className="sm:hidden inline-flex h-10 w-10 items-center justify-center rounded-md border text-gray-700 hover:text-frenchRose"
+                    aria-label="Toggle menu"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="4" y1="7" x2="20" y2="7" />
+                    <line x1="4" y1="12" x2="20" y2="12" />
+                    <line x1="4" y1="17" x2="20" y2="17" />
+                    </svg>
+                </button>
+                <NavLink to="/" className="text-2xl font-bold text-[var(--color-primary)] tracking-tight">
+                    Homely
+                </NavLink>
+                </div>
+                <nav className="hidden sm:flex items-center gap-4">
+                <NavLink to="/" end className={({ isActive }) => isActive ? 'text-[var(--color-primary)] font-semibold' : 'text-gray-700 hover:text-[var(--color-primary)] transition'}>
+                    Home
+                </NavLink>
+                <NavLink to="/listings" className={({ isActive }) => isActive ? 'text-[var(--color-primary)] font-semibold' : 'text-gray-700 hover:text-[var(--color-primary)] transition'}>
+                    Explore
+                </NavLink>
+                <NavLink to="/rent" className={({ isActive }) => isActive ? 'text-[var(--color-primary)] font-semibold' : 'text-gray-700 hover:text-[var(--color-primary)] transition'}>
+                    Rent
+                </NavLink>
+                <NavLink to="/buy" className={({ isActive }) => isActive ? 'text-[var(--color-primary)] font-semibold' : 'text-gray-700 hover:text-[var(--color-primary)] transition'}>
+                    Buy
+                </NavLink>
+                <NavLink to="/create" className={({ isActive }) => isActive ? 'text-[var(--color-primary)] font-semibold' : 'text-gray-700 hover:text-[var(--color-primary)] transition'}>
+                    Post 
+                </NavLink>
+                <NavLink to="/contact" className={({ isActive }) => isActive ? 'text-[var(--color-primary)] font-semibold' : 'text-gray-700 hover:text-[var(--color-primary)] transition'}>
+                    Contact
+                </NavLink>
+                </nav>
+                <div className="hidden sm:flex items-center gap-2">
+                <NavLink to="/login" className="btn-secondary px-3 py-2">
+                    Login
+                </NavLink>
+                <NavLink to="/signup" className="btn-primary px-3 py-2">
+                    Sign Up
+                </NavLink>
+                </div>
+            </div>
+            {menuOpen && (
+                <div className="sm:hidden mt-3 border-t pt-3">
+                <div className="flex flex-col gap-2">
+                    <NavLink to="/" end onClick={() => setMenuOpen(false)} className={({ isActive }) => isActive ? 'text-frenchRose font-semibold' : 'text-gray-700'}>
+                    Home
+                    </NavLink>
+                    <NavLink
+                    to="/listings"
+                    onClick={() => setMenuOpen(false)}
+                    className={({ isActive }) => isActive ? 'text-frenchRose font-semibold' : 'text-gray-700'}
+                    >
+                    Explore
+                    </NavLink>
+                    <NavLink to="/rent" onClick={() => setMenuOpen(false)} className={({ isActive }) => isActive ? 'text-frenchRose font-semibold' : 'text-gray-700'}>
+                    Rent
+                    </NavLink>
+                    <NavLink to="/buy" onClick={() => setMenuOpen(false)} className={({ isActive }) => isActive ? 'text-frenchRose font-semibold' : 'text-gray-700'}>
+                    Buy
+                    </NavLink>
+                    <NavLink
+                    to="/create"
+                    onClick={() => setMenuOpen(false)}
+                    className={({ isActive }) => isActive ? 'text-frenchRose font-semibold' : 'text-gray-700'}
+                    >
+                    Post 
+                    </NavLink>
+                    <NavLink to="/contact" onClick={() => setMenuOpen(false)} className={({ isActive }) => isActive ? 'text-frenchRose font-semibold' : 'text-gray-700'}>
+                    Contact
+                    </NavLink>
+                    <div className="flex items-center gap-2 pt-2">
+                    <NavLink to="/login" onClick={() => setMenuOpen(false)} className="btn-secondary flex-1 px-3 py-2 text-center">
+                        Login
+                    </NavLink>
+                    <NavLink to="/signup" onClick={() => setMenuOpen(false)} className="btn-primary flex-1 px-3 py-2 text-center">
+                        Sign Up
+                    </NavLink>
+                    </div>
+                </div>
+                </div>
+            )}
+            </div>
+        </header>
+
+        <main className="flex-1">
+            <div className="mx-auto w-full max-w-7xl px-3 sm:px-4 py-4 sm:py-6">
+            <Outlet />
+            </div>
+        </main>
+
+        <footer className="bg-white border-t shadow-sm mt-auto">
+            <div className="mx-auto w-full max-w-7xl px-4 py-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                <div className="text-[var(--color-primary)] font-bold text-lg mb-2">Homely</div>
+                <div className="text-gray-700 mb-2">Find your next home with ease.</div>
+                <div className="flex gap-3 mt-4">
+                    <a href="#" aria-label="Twitter" className="text-gray-400 hover:text-frenchRose transition">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.59-2.47.7a4.3 4.3 0 0 0 1.88-2.38 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 16.11 4c-2.37 0-4.29 1.92-4.29 4.29 0 .34.04.67.11.99A12.13 12.13 0 0 1 3.15 5.13a4.28 4.28 0 0 0 1.33 5.72c-.7-.02-1.36-.21-1.93-.53v.05c0 2.01 1.43 3.69 3.32 4.07-.35.1-.72.16-1.1.16-.27 0-.53-.03-.78-.07.53 1.65 2.07 2.85 3.89 2.88A8.6 8.6 0 0 1 2 19.54a12.13 12.13 0 0 0 6.56 1.92c7.88 0 12.2-6.53 12.2-12.2 0-.19 0-.38-.01-.57A8.7 8.7 0 0 0 24 4.59a8.59 8.59 0 0 1-2.54.7z"/></svg>
+                    </a>
+                    <a href="#" aria-label="Instagram" className="text-gray-400 hover:text-frenchRose transition">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5A4.25 4.25 0 0 0 20.5 16.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm4.25 3.25a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5zm0 1.5a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5zm6.25 1.25a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                    </a>
+                    <a href="#" aria-label="Facebook" className="text-gray-400 hover:text-frenchRose transition">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 5 3.66 9.13 8.44 9.88v-6.99h-2.54v-2.89h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.45h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.89h-2.34v6.99C18.34 21.13 22 17 22 12z"/></svg>
+                    </a>
+                </div>
+                </div>
+                <div>
+                <div className="font-semibold mb-2 text-gray-800">Explore</div>
+                <ul className="space-y-1">
+                    <li><a href="/listings" className="hover:text-frenchRose transition">All Listings</a></li>
+                    <li><a href="/search?type=room" className="hover:text-frenchRose transition">Rooms</a></li>
+                    <li><a href="/search?type=apartment" className="hover:text-frenchRose transition">Flats</a></li>
+                </ul>
+                </div>
+                <div>
+                <div className="font-semibold mb-2 text-gray-800">Company</div>
+                <ul className="space-y-1">
+                    <li><a href="/about" className="hover:text-frenchRose transition">About</a></li>
+                    <li><a href="/contact" className="hover:text-frenchRose transition">Contact</a></li>
+                </ul>
+                </div>
+                <div>
+                <div className="font-semibold mb-2 text-gray-800">Legal</div>
+                <ul className="space-y-1">
+                    <li><a href="/privacy" className="hover:text-frenchRose transition">Privacy</a></li>
+                    <li><a href="/terms" className="hover:text-frenchRose transition">Terms</a></li>
+                </ul>
+                </div>
+            </div>
+            <div className="mt-8 text-center text-gray-500 text-xs">
+                © {new Date().getFullYear()} <span className="text-[var(--color-primary)] font-semibold">Homely</span>. All rights reserved.
+            </div>
+            </div>
+        </footer>
+        </div>
+    )
+    }
+
+    export default App
+    #root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+    }
+
+    .logo {
+    height: 6em;
+    padding: 1.5em;
+    will-change: filter;
+    transition: filter 300ms;
+    }
+    .logo:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+    }
+    .logo.react:hover {
+    filter: drop-shadow(0 0 2em #61dafbaa);
+    }
+
+    @keyframes logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+    a:nth-of-type(2) .logo {
+        animation: logo-spin infinite 20s linear;
+    }
+    }
+
+    .card {
+    padding: 2em;
+    }
+
+    .read-the-docs {
+    color: #888;
+    }
+    import { useState } from 'react'
+    import { useNavigate } from 'react-router-dom'
+
+    function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    }
+
+    export default function Signup() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [role, setRole] = useState('Tenant')
+    const [agree, setAgree] = useState(false)
+    const [errors, setErrors] = useState({})
+    const navigate = useNavigate()
+
+    function handleSignup(e) {
+        e.preventDefault()
+        const newErrors = {}
+        if (!email) newErrors.email = 'Please enter your email.'
+        else if (/\s/.test(email)) newErrors.email = 'Email cannot contain spaces.'
+        else if (!validateEmail(email)) newErrors.email = 'Please enter a valid email address.'
+
+        if (!password) newErrors.password = 'Please enter your password.'
+        else if (/\s/.test(password)) newErrors.password = 'Password cannot contain spaces.'
+        else if (password.length < 8) newErrors.password = 'Password must be at least 8 characters.'
+
+        if (!agree) newErrors.agree = 'You must agree to the Terms.'
+
+        // Check for duplicate email
+        const users = JSON.parse(localStorage.getItem('users') || '[]')
+        if (email && users.find(u => u.email === email)) {
+        newErrors.email = 'Email already registered.'
+        }
+
+        if (Object.keys(newErrors).length) {
+        setErrors(newErrors)
+        return
+        }
+
+        users.push({ email, password, role })
+        localStorage.setItem('users', JSON.stringify(users))
+        localStorage.setItem('currentUser', JSON.stringify({ email, role }))
+        navigate('/dashboard')
+    }
+
+    return (
+        <div className="w-full flex items-center justify-center py-8">
+        <div className="w-full max-w-md card">
+            <h1 className="text-2xl font-semibold mb-6 text-center text-[var(--color-primary)]">Create Account</h1>
+            <p className="text-center text-gray-600 mb-4">Welcome! Join Homely to find your next home or list your property.</p>
+            <form className="space-y-4" onSubmit={handleSignup}>
+            <div>
+                <label className="block text-sm text-gray-600 mb-1">Email</label>
+                <input
+                type="email"
+                className="input"
+                placeholder="you@example.com"
+                value={email}
+                onChange={e => {
+                    setEmail(e.target.value)
+                    setErrors(err => ({ ...err, email: undefined }))
+                }}
+                />
+                {errors.email && <div className="text-xs text-[var(--color-primary)] mt-1">{errors.email}</div>}
+            </div>
+            <div>
+                <label className="block text-sm text-gray-600 mb-1">Password</label>
+                <input
+                type="password"
+                className="input"
+                placeholder="••••••••"
+                value={password}
+                onChange={e => {
+                    setPassword(e.target.value)
+                    setErrors(err => ({ ...err, password: undefined }))
+                }}
+                />
+                {errors.password && <div className="text-xs text-[var(--color-primary)] mt-1">{errors.password}</div>}
+                <div className="text-xs text-gray-500 mt-1">Password must be at least 8 characters.</div>
+            </div>
+            <div>
+                <label className="block text-sm text-gray-600 mb-1">Role</label>
+                <select className="select" value={role} onChange={e=>setRole(e.target.value)}>
+                <option>Tenant</option>
+                <option>Owner</option>
+                <option>Agent</option>
+                </select>
+            </div>
+            <label className="inline-flex items-center gap-2 text-sm">
+                <input
+                type="checkbox"
+                checked={agree}
+                onChange={e => {
+                    setAgree(e.target.checked)
+                    setErrors(err => ({ ...err, agree: undefined }))
+                }}
+                />
+                <span>I agree to the Terms</span>
+            </label>
+            {errors.agree && <div className="text-xs text-[var(--color-primary)] mt-1">{errors.agree}</div>}
+            <button className="btn-primary w-full" type="submit">Sign up</button>
+            <div className="text-sm text-center mt-2">
+                Already have an account? <a href="/login" className="text-[var(--color-primary)] hover:underline">Login</a>
+            </div>
+            </form>
+            <div className="mt-6 text-xs text-gray-500 text-center">
+            By signing up, you agree to our Terms of Service and Privacy Policy.
+            </div>
+        </div>
+        </div>
+    )
+    }
+    import { useEffect, useMemo, useState } from 'react'
+    import { Link, useLocation, useLoaderData } from 'react-router-dom'
+    import { getListings } from '../mock'
+
+    export default function Search() {
+    const locationHook = useLocation()
+    const loaderData = useLoaderData() || {}
+    const params = useMemo(() => new URLSearchParams(locationHook.search), [locationHook.search])
+
+    // Determine mode from loader or query param
+    const typeParam = loaderData.type || params.get('type') || ''
+    const mode = typeParam === 'buy' ? 'Buy' : typeParam === 'rent' ? 'Rent' : 'Search'
+
+    // Set initial filter type from loaderData (for rent/buy pages)
+    const [drawerOpen, setDrawerOpen] = useState(false)
+    const [view, setView] = useState('grid')
+    const [filters, setFilters] = useState({
+        type: typeParam,
+        location: params.get('location') || '',
+        minPrice: params.get('minPrice') || '',
+        maxPrice: params.get('maxPrice') || '',
+        rooms: params.get('rooms') || '',
+        amenities: new Set(),
+    })
+    const [filtersApplied, setFiltersApplied] = useState(false)
+
+    // Update filters if loaderData.type changes (for rent/buy navigation)
+    useEffect(() => {
+        setFilters((prev) => ({
+        ...prev,
+        type: loaderData.type || params.get('type') || '',
+        location: params.get('location') || '',
+        minPrice: params.get('minPrice') || '',
+        maxPrice: params.get('maxPrice') || '',
+        rooms: params.get('rooms') || '',
+        }))
+        setFiltersApplied(false) // Reset filtersApplied when route changes
+    }, [loaderData.type, params])
+
+    const listings = useMemo(() => getListings(), [])
+
+    // Only filter items if filtersApplied is true
+    const items = useMemo(() => {
+        if (!filtersApplied) return listings
+        return listings.filter((l) => {
+        const matchesType = filters.type ? l.type === filters.type : true
+        const matchesLocation = filters.location ? l.city.toLowerCase().includes(filters.location.toLowerCase()) : true
+        const matchesMin = filters.minPrice ? l.price >= parseInt(filters.minPrice) : true
+        const matchesMax = filters.maxPrice ? l.price <= parseInt(filters.maxPrice) : true
+        const matchesRooms = filters.rooms ? l.bedrooms >= parseInt(filters.rooms) : true
+        const matchesAmenities = filters.amenities.size
+            ? Array.from(filters.amenities).every((a) => l.amenities.includes(a))
+            : true
+        return matchesType && matchesLocation && matchesMin && matchesMax && matchesRooms && matchesAmenities
+        })
+    }, [filters, listings, filtersApplied])
+
+    function updateAmenity(a) {
+        setFilters((prev) => {
+        const next = new Set(prev.amenities)
+        if (next.has(a)) next.delete(a)
+        else next.add(a)
+        return { ...prev, amenities: next }
+        })
+    }
+
+    function resetFilters() {
+        setFilters({ type: loaderData.type || '', location: '', minPrice: '', maxPrice: '', rooms: '', amenities: new Set() })
+        setFiltersApplied(false)
+    }
+
+    function applyFilters(e) {
+        e?.preventDefault?.()
+        setFiltersApplied(true)
+        setDrawerOpen(false)
+    }
+
+    const isFiltered =
+        !!filters.type ||
+        !!filters.location ||
+        !!filters.minPrice ||
+        !!filters.maxPrice ||
+        !!filters.rooms ||
+        (filters.amenities && filters.amenities.size > 0)
+
+    const FilterPanel = (
+        <div className="h-full flex flex-col gap-4 overflow-y-auto pb-4 bg-[var(--color-light)] rounded-xl shadow-soft ring-1 ring-[var(--color-bg)]/60 px-4 py-4">
+        <div className="text-lg font-semibold mb-2">Filters</div>
+        <div className="space-y-2">
+            <label className="block text-sm text-gray-700">Location</label>
+            <input className="input" placeholder="City or area" value={filters.location}
+            onChange={(e)=>setFilters(f=>({...f, location: e.target.value}))} />
+        </div>
+        <div className="space-y-2">
+            <label className="block text-sm text-gray-700">Property type</label>
+            <select className="select" value={filters.type} onChange={(e)=>setFilters(f=>({...f, type: e.target.value}))}>
+            <option value="">Any</option>
+            <option value="room">Room</option>
+            <option value="apartment">Flat</option>
+            <option value="house">House</option>
+            <option value="pg">PG</option>
+            </select>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+            <div>
+            <label className="block text-sm text-gray-700">Min price</label>
+            <input className="input" type="number" value={filters.minPrice}
+                onChange={(e)=>setFilters(f=>({...f, minPrice: e.target.value}))} />
+            </div>
+            <div>
+            <label className="block text-sm text-gray-700">Max price</label>
+            <input className="input" type="number" value={filters.maxPrice}
+                onChange={(e)=>setFilters(f=>({...f, maxPrice: e.target.value}))} />
+            </div>
+        </div>
+        <div>
+            <label className="block text-sm text-gray-700 mb-1">Rooms</label>
+            <select className="select" value={filters.rooms} onChange={(e)=>setFilters(f=>({...f, rooms: e.target.value}))}>
+            <option value="">Any</option>
+            <option value="1">1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+            </select>
+        </div>
+        <div>
+            <div className="text-sm text-gray-700 mb-1">Amenities</div>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+            {['AC','Wifi','Parking'].map(a => (
+                <label key={a} className="inline-flex items-center gap-2">
+                <input type="checkbox" checked={filters.amenities.has(a)} onChange={()=>updateAmenity(a)} />
+                <span>{a}</span>
+                </label>
+            ))}
+            </div>
+        </div>
+        <div className="mt-auto flex gap-2">
+            <button type="button" className="btn-primary flex-1" onClick={applyFilters}>Apply</button>
+            <button type="button" onClick={resetFilters} className="btn-secondary flex-1">Reset</button>
+        </div>
+        </div>
+    )
+
+    return (
+        <div className="w-full grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
+        {/* Mobile controls */}
+        <div className="lg:hidden flex items-center justify-between mb-4 px-1">
+            <button onClick={()=>setDrawerOpen(true)} className="btn-secondary">Filters</button>
+            <div className="flex items-center gap-2">
+            <button aria-label="Grid view" className={`h-9 w-12 rounded-md border flex items-center justify-center ${view==='grid' ? 'btn-active' : 'bg-white text-gray-700 hover:text-frenchRose'}`} onClick={()=>setView('grid')}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="4" y="4" width="7" height="7"/>
+                <rect x="13" y="4" width="7" height="7"/>
+                <rect x="4" y="13" width="7" height="7"/>
+                <rect x="13" y="13" width="7" height="7"/>
+                </svg>
+            </button>
+            <button aria-label="List view" className={`h-9 w-12 rounded-md border flex items-center justify-center ${view==='list' ? 'btn-active' : 'bg-white text-gray-700 hover:text-frenchRose'}`} onClick={()=>setView('list')}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="4" y="6" width="16" height="3"/>
+                <rect x="4" y="11" width="16" height="3"/>
+                <rect x="4" y="16" width="16" height="3"/>
+                </svg>
+            </button>
+            </div>
+        </div>
+
+        {/* Drawer */}
+        {drawerOpen && (
+            <div className="lg:hidden fixed inset-0 z-40">
+            <div className="absolute inset-0 bg-black/30" onClick={()=>setDrawerOpen(false)}></div>
+            <div className="absolute left-0 top-0 h-full w-80 max-w-[85vw] p-0">
+                <div className="bg-[var(--color-light)] rounded-xl shadow-soft ring-1 ring-[var(--color-bg)]/60 h-full overflow-y-auto px-4 py-4">
+                {FilterPanel}
+                </div>
+            </div>
+            </div>
+        )}
+
+        {/* Sidebar */}
+        <aside className="hidden lg:block h-full min-h-[400px] max-h-[calc(100vh-120px)] sticky top-[80px]">
+            {FilterPanel}
+        </aside>
+
+        {/* Results */}
+        <section className="space-y-4 px-1">
+            <div className="mb-2 text-xl font-semibold text-[var(--color-primary)]">
+            {mode} Listings
+            </div>
+            <div className="hidden lg:flex items-center justify-between mb-2">
+            <div className="text-gray-700">{items.length} results</div>
+            <div className="flex items-center gap-2">
+                <button aria-label="Grid view" className={`h-9 w-9 rounded-md border flex items-center justify-center ${view==='grid' ? 'btn-active' : 'bg-white text-gray-700 hover:text-frenchRose'}`} onClick={()=>setView('grid')}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="4" y="4" width="7" height="7"/>
+                    <rect x="13" y="4" width="7" height="7"/>
+                    <rect x="4" y="13" width="7" height="7"/>
+                    <rect x="13" y="13" width="7" height="7"/>
+                </svg>
+                </button>
+                <button aria-label="List view" className={`h-9 w-9 rounded-md border flex items-center justify-center ${view==='list' ? 'btn-active' : 'bg-white text-gray-700 hover:text-frenchRose'}`} onClick={()=>setView('list')}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="4" y="6" width="16" height="3"/>
+                    <rect x="4" y="11" width="16" height="3"/>
+                    <rect x="4" y="16" width="16" height="3"/>
+                </svg>
+                </button>
+                <select className="select">
+                <option value="recent">Sort: Most Recent</option>
+                <option value="low">Sort: Price Low to High</option>
+                <option value="high">Sort: Price High to Low</option>
+                </select>
+            </div>
+            </div>
+            {items.length === 0 && filtersApplied && (
+            <div className="text-center text-gray-500 py-12">No results found. Try changing your filters.</div>
+            )}
+            {view === 'grid' ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {items.map((l, idx) => (
+                <div key={l.id} className="card hover:-translate-y-0.5 hover:shadow-lg transition">
+                    <div className="aspect-video rounded-lg overflow-hidden mb-3 flex items-center justify-center bg-gray-200/60">
+                    <img
+                        src={l.images && l.images.length > 0 ? l.images[0] : `https://source.unsplash.com/400x225/?house,interior,modern,architecture,realestate&sig=${idx}`}
+                        alt={l.title}
+                        className="w-full h-full object-cover"
+                    />
+                    </div>
+                    <div className="flex items-center justify-between">
+                    <div className="text-lg font-semibold text-gray-800">INR {l.price.toLocaleString()}</div>
+                    <div className="text-xs px-2 py-1 rounded bg-peonyPink/60 text-gray-700">{l.city}</div>
+                    </div>
+                    <div className="text-sm text-gray-600">{l.title}</div>
+                    <div className="mt-3 flex gap-2">
+                    <Link to={`/listings/${l.id}`} className="btn-secondary flex-1">View</Link>
+                    <Link to={`/contact?listing=${l.id}`} className="btn-primary flex-1">Contact</Link>
+                    </div>
+                </div>
+                ))}
+            </div>
+            ) : (
+            <div className="space-y-4">
+                {items.map((l, idx) => (
+                <div key={l.id} className="card flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                    <div className="w-full sm:w-64 aspect-video rounded-lg overflow-hidden flex items-center justify-center bg-gray-200/60">
+                    <img
+                        src={l.images && l.images.length > 0 ? l.images[0] : `https://source.unsplash.com/400x225/?house,interior,modern,architecture,realestate&sig=${idx}`}
+                        alt={l.title}
+                        className="w-full h-full object-cover"
+                    />
+                    </div>
+                    <div className="flex-1 w-full">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="text-lg font-semibold text-gray-800">INR {l.price.toLocaleString()}</div>
+                        <div className="text-xs px-2 py-1 rounded bg-peonyPink/60 text-gray-700">{l.city}</div>
+                    </div>
+                    <div className="text-sm text-gray-600">{l.title}</div>
+                    <div className="mt-3 flex gap-2">
+                        <Link to={`/listings/${l.id}`} className="btn-secondary">View</Link>
+                        <Link to={`/contact?listing=${l.id}`} className="btn-primary">Contact</Link>
+                    </div>
+                    </div>
+                </div>
+                ))}
+            </div>
+            )}
+
+            <div className="flex justify-center pt-2">
+            <button className="btn-secondary">Load more</button>
+            </div>
+        </section>
+        </div>
+    )
+    }
+    import { useState } from 'react'
+
+    export default function Profile() {
+    const [tab, setTab] = useState('info')
+    return (
+        <div className="space-y-6">
+        {/* Profile completion bar */}
+        <div className="mb-2">
+            <div className="text-sm text-gray-600 mb-1">Profile Completion</div>
+            <div className="w-full bg-orchidSmoke rounded-full h-2">
+            <div className="h-2 rounded-full --color-primary" style={{ width: '70%' }} />
+            </div>
+            <div className="text-xs text-gray-500 mt-1">Complete your profile for better matches.</div>
+        </div>
+
+        <div className="flex items-center gap-4">
+            <div className="h-16 w-16 rounded-full --color-primary text-white flex items-center justify-center font-bold text-xl animate-bounce">
+            <img
+                src="https://source.unsplash.com/64x64/?person,avatar"
+                alt="User avatar"
+                className="h-16 w-16 rounded-full object-cover"
+            />
+            </div>
+            <div>
+            <div className="text-xl font-semibold">Your Name</div>
+            <div className="text-gray-600">@username</div>
+            </div>
+            <button className="btn-secondary ml-auto">Edit</button>
+        </div>
+        <div className="flex gap-2 flex-wrap">
+            <button onClick={()=>setTab('info')} className={`btn-secondary ${tab==='info' ? 'tab-active' : ''}`}>Personal Info</button>
+            <button onClick={()=>setTab('prefs')} className={`btn-secondary ${tab==='prefs' ? 'tab-active' : ''}`}>Preferences</button>
+            <button onClick={()=>setTab('security')} className={`btn-secondary ${tab==='security' ? 'tab-active' : ''}`}>Security</button>
+        </div>
+
+        {tab==='info' && (
+            <form className="grid grid-cols-1 sm:grid-cols-2 gap-4 card">
+            <div>
+                <label className="block text-sm text-gray-600 mb-1">Full name</label>
+                <input className="input" />
+            </div>
+            <div>
+                <label className="block text-sm text-gray-600 mb-1">Email</label>
+                <input className="input" />
+            </div>
+            <div className="sm:col-span-2">
+                <label className="block text-sm text-gray-600 mb-1">Address</label>
+                <input className="input" />
+            </div>
+            <div className="sm:col-span-2">
+                <button className="btn-primary">Save</button>
+            </div>
+            </form>
+        )}
+
+        {tab==='prefs' && (
+            <div className="card space-y-3">
+            <label className="inline-flex items-center gap-2">
+                <input type="checkbox" />
+                <span>Email notifications</span>
+            </label>
+            <label className="inline-flex items-center gap-2">
+                <input type="checkbox" />
+                <span>SMS alerts</span>
+            </label>
+            </div>
+        )}
+
+        {tab==='security' && (
+            <form className="card space-y-3">
+            <div>
+                <label className="block text-sm text-gray-600 mb-1">Current password</label>
+                <input type="password" className="input" />
+            </div>
+            <div>
+                <label className="block text-sm text-gray-600 mb-1">New password</label>
+                <input type="password" className="input" />
+            </div>
+            <button className="btn-primary">Update password</button>
+            </form>
+        )}
+
+        {/* Recent activity */}
+        <div className="card mt-6">
+            <div className="font-medium mb-2">Recent Activity</div>
+            <ul className="list-disc ml-4 text-sm text-gray-700">
+            <li>Updated profile info</li>
+            <li>Contacted a lister</li>
+            <li>Saved a property</li>
+            </ul>
+        </div>
+        </div>
+    )
+    }
+    import { StrictMode } from 'react'
+    import { createRoot } from 'react-dom/client'
+    import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+    import App from '../App.jsx'
+    import Listings from './Listings.jsx'
+    import ListingDetails from './ListingDetails.jsx'
+    import CreateListing from './CreateListing.jsx'
+    import Dashboard from './Dashboard.jsx'
+    import Login from './Login.jsx'
+    import Home from './Home.jsx'
+    import Search from './Search.jsx'
+    import Signup from './Signup.jsx'
+    import Profile from './Profile.jsx'
+    import Contact from './Contact.jsx'
+    import Chat from './Chat.jsx'
+    import '../index.css'
+
+    const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <App />,
+        children: [
+        { index: true, element: <Home /> },
+        { path: 'listings', element: <Listings /> },
+        { path: 'search', element: <Search /> },
+        { path: 'rent', element: <Search key="rent" />, loader: () => ({ type: 'rent' }) },
+        { path: 'buy', element: <Search key="buy" />, loader: () => ({ type: 'buy' }) },
+        { path: 'listings/:id', element: <ListingDetails /> },
+        { path: 'create', element: <CreateListing /> },
+        { path: 'dashboard', element: <Dashboard /> },
+        { path: 'login', element: <Login /> },
+        { path: 'signup', element: <Signup /> },
+        { path: 'profile', element: <Profile /> },
+        { path: 'contact', element: <Contact /> },
+        { path: 'messages', element: <Chat /> },
+        { path: '*', element: <Listings /> },
+        ],
+    },
+    ])
+
+    createRoot(document.getElementById('root')).render(
+    <StrictMode>
+        <RouterProvider router={router} />
+    </StrictMode>,
+    )
+    import { useState } from 'react'
+    import { useNavigate } from 'react-router-dom'
+
+    function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    }
+
+    export default function Login() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [errors, setErrors] = useState({})
+    const navigate = useNavigate()
+
+    function handleLogin(e) {
+        e.preventDefault()
+        const newErrors = {}
+        if (!email) newErrors.email = 'Please enter your email.'
+        else if (/\s/.test(email)) newErrors.email = 'Email cannot contain spaces.'
+        else if (!validateEmail(email)) newErrors.email = 'Please enter a valid email address.'
+
+        if (!password) newErrors.password = 'Please enter your password.'
+        else if (/\s/.test(password)) newErrors.password = 'Password cannot contain spaces.'
+
+        if (Object.keys(newErrors).length) {
+        setErrors(newErrors)
+        return
+        }
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]')
+        const user = users.find(u => u.email === email && u.password === password)
+        if (!user) {
+        setErrors({ password: 'Invalid email or password.' })
+        return
+        }
+        localStorage.setItem('currentUser', JSON.stringify({ email: user.email, role: user.role }))
+        navigate('/dashboard')
+    }
+
+    return (
+        <div className="w-full flex items-center justify-center py-8">
+        <div className="w-full max-w-md card">
+            <h1 className="text-2xl font-semibold mb-6 text-center text-[var(--color-primary)]">Login</h1>
+            <p className="text-center text-gray-600 mb-4">Welcome back! Sign in to continue to Homely.</p>
+            <form className="space-y-4" onSubmit={handleLogin}>
+            <div>
+                <label className="block text-sm text-gray-600 mb-1">Email</label>
+                <input
+                type="email"
+                className="input"
+                placeholder="you@example.com"
+                value={email}
+                onChange={e => {
+                    setEmail(e.target.value)
+                    setErrors(err => ({ ...err, email: undefined }))
+                }}
+                />
+                {errors.email && <div className="text-xs text-[var(--color-primary)] mt-1">{errors.email}</div>}
+            </div>
+            <div>
+                <label className="block text-sm text-gray-600 mb-1">Password</label>
+                <input
+                type="password"
+                className="input"
+                placeholder="••••••••"
+                value={password}
+                onChange={e => {
+                    setPassword(e.target.value)
+                    setErrors(err => ({ ...err, password: undefined }))
+                }}
+                />
+                {errors.password && <div className="text-xs text-[var(--color-primary)] mt-1">{errors.password}</div>}
+                <div className="text-xs text-gray-500 mt-1">
+                <a href="#" className="text-[var(--color-primary)] hover:underline">Forgot password?</a>
+                </div>
+            </div>
+            <button className="btn-primary w-full" type="submit">Sign in</button>
+            <button type="button" className="btn-secondary w-full">Continue with Google</button>
+            <div className="text-sm text-center">
+                <a href="/signup" className="text-[var(--color-primary)] hover:underline">Create an account</a>
+            </div>
+            </form>
+            <div className="mt-6 text-xs text-gray-500 text-center">
+            By logging in, you agree to our Terms of Service and Privacy Policy.
+            </div>
+        </div>
+        </div>
+    )
+    }
+    import { useMemo, useState } from 'react'
+    import { Link } from 'react-router-dom'
+    import { getListings } from '../mock'
+
+    export default function Listings() {
+    const [search, setSearch] = useState('')
+    const [city, setCity] = useState('')
+    const [minPrice, setMinPrice] = useState('')
+    const [maxPrice, setMaxPrice] = useState('')
+    const [view, setView] = useState('grid') // 'grid' | 'list'
+
+    const listings = useMemo(() => getListings(), [])
+    const items = useMemo(() => {
+        return listings.filter((listing) => {
+        const matchesSearch =
+            listing.title.toLowerCase().includes(search.toLowerCase()) ||
+            listing.description.toLowerCase().includes(search.toLowerCase())
+        const matchesCity = city ? listing.city.toLowerCase() === city.toLowerCase() : true
+        const matchesMin = minPrice ? listing.price >= parseInt(minPrice) : true
+        const matchesMax = maxPrice ? listing.price <= parseInt(maxPrice) : true
+        return matchesSearch && matchesCity && matchesMin && matchesMax
+        })
+    }, [search, city, minPrice, maxPrice, listings])
+
+    const uniqueCities = useMemo(
+        () => Array.from(new Set(listings.map((l) => l.city))),
+        [listings]
+    )
+
+    return (
+        <div className="w-full">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-[var(--color-primary)]">Browse Listings</h1>
+            <div className="flex items-center gap-2">
+            <button
+                aria-label="Grid view"
+                className={`h-9 w-12 rounded-md border flex items-center justify-center ${view==='grid' ? 'btn-active' : 'bg-white text-gray-700 hover:text-frenchRose'}`}
+                onClick={() => setView('grid')}
+            >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="4" y="4" width="7" height="7"/>
+                <rect x="13" y="4" width="7" height="7"/>
+                <rect x="4" y="13" width="7" height="7"/>
+                <rect x="13" y="13" width="7" height="7"/>
+                </svg>
+            </button>
+            <button
+                aria-label="List view"
+                className={`h-9 w-12 rounded-md border flex items-center justify-center ${view==='list' ? 'btn-active' : 'bg-white text-gray-700 hover:text-frenchRose'}`}
+                onClick={() => setView('list')}
+            >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="4" y="6" width="16" height="3"/>
+                <rect x="4" y="11" width="16" height="3"/>
+                <rect x="4" y="16" width="16" height="3"/>
+                </svg>
+            </button>
+            <select className="select">
+                <option value="recent">Sort: Most Recent</option>
+                <option value="low">Sort: Price Low to High</option>
+                <option value="high">Sort: Price High to Low</option>
+            </select>
+            <Link to="/create" className="btn-primary">Post</Link>
+            </div>
+        </div>
+        <form className="mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 bg-white p-4 rounded-xl shadow-soft ring-1 ring-vainillaSuede/60">
+            <input
+            type="text"
+            className="input"
+            placeholder="Search by keyword..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            />
+            <select
+            className="select"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            >
+            <option value="">All Cities</option>
+            {uniqueCities.map((c) => (
+                <option key={c} value={c}>
+                {c}
+                </option>
+            ))}
+            </select>
+            <input
+            type="number"
+            className="input"
+            placeholder="Min Price"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            />
+            <input
+            type="number"
+            className="input"
+            placeholder="Max Price"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            />
+        </form>
+        {items.length === 0 && (
+            <div className="text-center text-gray-500 py-12">No listings found. Try adjusting your filters.</div>
+        )}
+        {view === 'grid' ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {items.map((l, idx) => (
+                <div key={l.id} className="card hover:-translate-y-0.5 hover:shadow-lg transition">
+                <div className="aspect-video rounded-lg overflow-hidden mb-3 flex items-center justify-center bg-gray-200/60">
+                    {/* Show first image from listing.images, fallback to Unsplash if missing */}
+                    <img
+                    src={l.images && l.images.length > 0 ? l.images[0] : `https://source.unsplash.com/400x225/?house,interior,modern,architecture,realestate&sig=${idx}`}
+                    alt={l.title}
+                    className="w-full h-full object-cover"
+                    />
+                </div>
+                <div className="flex items-center justify-between">
+                    <div className="text-lg font-semibold text-gray-800">INR {l.price.toLocaleString()}</div>
+                    <div className="text-xs px-2 py-1 rounded bg-peonyPink/60 text-gray-700">{l.city}</div>
+                </div>
+                <div className="text-sm text-gray-600">{l.title}</div>
+                <div className="mt-3 flex gap-2">
+                    <Link to={`/listings/${l.id}`} className="btn-secondary flex-1">View</Link>
+                    <Link to={`/contact?listing=${l.id}`} className="btn-primary flex-1">Contact</Link>
+                </div>
+                </div>
+            ))}
+            </div>
+        ) : (
+            <div className="space-y-4">
+            {items.map((l, idx) => (
+                <div key={l.id} className="card flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                <div className="w-full sm:w-64 aspect-video rounded-lg overflow-hidden flex items-center justify-center bg-gray-200/60">
+                    <img
+                    src={l.images && l.images.length > 0 ? l.images[0] : `https://source.unsplash.com/400x225/?house,interior,modern,architecture,realestate&sig=${idx}`}
+                    alt={l.title}
+                    className="w-full h-full object-cover"
+                    />
+                </div>
+                <div className="flex-1 w-full">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="text-lg font-semibold text-gray-800">INR {l.price.toLocaleString()}</div>
+                    <div className="text-xs px-2 py-1 rounded bg-peonyPink/60 text-gray-700">{l.city}</div>
+                    </div>
+                    <div className="text-sm text-gray-600">{l.title}</div>
+                    <div className="mt-3 flex gap-2">
+                    <Link to={`/listings/${l.id}`} className="btn-secondary">View</Link>
+                    <Link to={`/contact?listing=${l.id}`} className="btn-primary">Contact</Link>
+                    </div>
+                </div>
+                </div>
+            ))}
+            </div>
+        )}
+        </div>
+    )
+    }
+    import { useParams, Link } from 'react-router-dom'
+    import { getListings } from '../mock'
+
+    export default function ListingDetails() {
+    const { id } = useParams()
+    const listing = getListings().find((l) => l.id === id)
+    if (!listing) return <div className="card">Listing not found.</div>
+    return (
+        <div className="space-y-6 w-full">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-[var(--color-primary)]">{listing.title}</h1>
+            <Link to="/listings" className="text-[var(--color-primary)] hover:underline">Back to listings</Link>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-4">
+            <div className="aspect-video rounded-xl bg-gray-200/70 overflow-hidden">
+                {/* Show all images in a horizontal scroll gallery */}
+                <div className="flex gap-3 overflow-x-auto pb-2">
+                {listing.images && listing.images.length > 0 ? (
+                    listing.images.map((img, i) => (
+                    <img
+                        key={i}
+                        src={img}
+                        alt={`${listing.title} ${i + 1}`}
+                        className="h-full w-auto max-w-[400px] object-cover rounded-lg"
+                        style={{ minWidth: '300px', maxHeight: '250px' }}
+                    />
+                    ))
+                ) : (
+                    <img
+                    src={`https://source.unsplash.com/800x450/?house,interior,modern,architecture,realestate&sig=${listing.id}`}
+                    alt="Listing"
+                    className="w-full h-full object-cover animate-pulse"
+                    />
+                )}
+                </div>
+            </div>
+            <div>
+                <h2 className="text-lg font-medium mb-2">Description</h2>
+                <p className="text-gray-700">{listing.description}</p>
+            </div>
+            <div>
+                <h2 className="text-lg font-medium mb-2">Amenities</h2>
+                <ul className="list-disc ml-6 text-gray-700">
+                {listing.amenities.map((a) => (
+                    <li key={a}>{a}</li>
+                ))}
+                </ul>
+            </div>
+            </div>
+            <aside className="space-y-4">
+            <div className="card">
+                <div className="text-2xl font-bold text-gray-800">{listing.currency} {listing.price.toLocaleString()}</div>
+                <div className="text-sm text-gray-600">per month</div>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                <button className="btn-primary">Book Visit</button>
+                <button className="btn-secondary">Save</button>
+                </div>
+            </div>
+            <div className="card">
+                <div className="font-medium">Host</div>
+                <div className="text-sm text-gray-600">Verified</div>
+                <div className="mt-2 text-xs text-gray-500">Contact: host@example.com</div>
+            </div>
+            <div className="card">
+                <div className="font-medium mb-2">Similar Listings</div>
+                <ul className="list-disc ml-4 text-sm text-gray-700">
+                <li>Sunny Apartment in {listing.city}</li>
+                <li>Cozy Room nearby</li>
+                <li>Modern Flat available</li>
+                </ul>
+            </div>
+            <div className="text-xs text-gray-400 mt-4">
+                Disclaimer: All listings are user-generated. Please verify details before making payments.
+            </div>
+            </aside>
+        </div>
+        </div>
+    )
+    }
+    import { useMemo, useState, useRef, useEffect } from 'react'
+    import { Link, useNavigate } from 'react-router-dom'
+    import { getListings } from '../mock'
+
+    export default function Home() {
+    const navigate = useNavigate()
+    const [location, setLocation] = useState('')
+    const [type, setType] = useState('')
+    const [price, setPrice] = useState('')
+
+    const featured = useMemo(() => getListings().slice(0, 8), [])
+    const carouselRef = useRef(null)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+        const el = carouselRef.current
+        if (!el) return
+        // Scroll by one card width, loop back if at end
+        const cardWidth = el.firstChild?.offsetWidth || 260
+        if (el.scrollLeft + el.offsetWidth >= el.scrollWidth - 1) {
+            el.scrollTo({ left: 0, behavior: 'smooth' })
+        } else {
+            el.scrollBy({ left: cardWidth, behavior: 'smooth' })
+        }
+        }, 2500)
+        return () => clearInterval(interval)
+    }, [])
+
+    function onSearchSubmit(e) {
+        e.preventDefault()
+        const params = new URLSearchParams()
+        if (location) params.set('location', location)
+        if (type) params.set('type', type)
+        if (price) params.set('maxPrice', price)
+        navigate(`/search?${params.toString()}`)
+    }
+
+    const categories = [
+        { key: 'room', label: 'Room', icon: '🛏️' },
+        { key: 'apartment', label: 'Flat', icon: '🏢' },
+        { key: 'house', label: 'House', icon: '🏠' },
+        { key: 'pg', label: 'PG', icon: '👥' },
+        { key: 'rent', label: 'Rent', icon: '💸', link: '/rent' },
+        { key: 'buy', label: 'Buy', icon: '🛒', link: '/buy' },
+    ]
+
+    const testimonials = [
+        { id: 1, name: 'Ayesha', text: 'Found the perfect flat in a week!', avatar: 'A' },
+        { id: 2, name: 'Omar', text: 'Smooth experience and great support.', avatar: 'O' },
+        { id: 3, name: 'Sara', text: 'Loved the filters and map view.', avatar: 'S' },
+        { id: 4, name: 'Ravi', text: 'Listed my property easily and got quick responses.', avatar: 'R' },
+        { id: 5, name: 'Mina', text: 'A must-use platform for renters!', avatar: 'M' },
+        { id: 6, name: 'Lina', text: 'The best place to find affordable housing.', avatar: 'L' },
+        { id: 7, name: 'Raj', text: 'User-friendly and efficient.', avatar: 'R' },
+        { id: 8, name: 'Nina', text: 'Highly recommend for both renters and owners.', avatar: 'N' },
+        { id: 9, name: 'Sam', text: 'Great variety of listings.', avatar: 'S' },
+        { id: 10, name: 'Tina', text: 'Excellent customer service.', avatar: 'T' },
+    ]
+
+    return (
+        <div className="space-y-12">
+        {/* Hero */}
+        <section className="rounded-2xl bg-gradient-to-b from-[var(--color-bg)] to-white p-6 sm:p-10 shadow-soft ring-1 ring-[var(--color-bg)]/60">
+            <div className="max-w-3xl">
+            <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-[var(--color-mistflower)]">Find Your Next Home</h1>
+            <p className="text-[var(--color-mistflower)] mb-6">Rent, buy, or list your property with ease.</p>
+            <form onSubmit={onSearchSubmit} className="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-white p-3 rounded-xl shadow-soft">
+                <input className="input" placeholder="Location" value={location} onChange={(e)=>setLocation(e.target.value)} />
+                <select className="select" value={type} onChange={(e)=>setType(e.target.value)}>
+                <option value="">Property Type</option>
+                <option value="room">Room</option>
+                <option value="apartment">Flat</option>
+                <option value="house">House</option>
+                <option value="pg">PG</option>
+                </select>
+                <input className="input" placeholder="Max Price" value={price} onChange={(e)=>setPrice(e.target.value)} />
+                <button className="btn-primary">Search</button>
+            </form>
+            </div>
+        </section>
+
+        {/* Featured */}
+        <section className="space-y-4">
+            <div className="flex items-center justify-between">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Featured Properties</h2>
+            <Link to="/listings" className="text-[var(--color-primary)] hover:underline">See all</Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {featured.map((l, idx) => (
+                <div key={l.id} className="card hover:-translate-y-0.5 hover:shadow-lg transition">
+                <div className={`aspect-video rounded-lg overflow-hidden mb-3 flex items-center justify-center bg-gray-200/60`}>
+                    <img
+                    src={l.images && l.images.length > 0 ? l.images[0] : `https://source.unsplash.com/400x225/?home,house,interior,modern,architecture&sig=${idx}`}
+                    alt={l.title}
+                    className="w-full h-full object-cover animate-pulse"
+                    />
+                </div>
+                <div className="flex items-center justify-between">
+                    <div className="text-lg font-semibold text-gray-800">{l.currency} {l.price.toLocaleString()}</div>
+                    <div className="text-xs px-2 py-1 rounded bg-peonyPink/60 text-gray-700">{l.city}</div>
+                </div>
+                <div className="text-sm text-gray-600">{l.title}</div>
+                <div className="mt-3 flex gap-2">
+                    <Link to={`/listings/${l.id}`} className="btn-secondary flex-1">View</Link>
+                    <Link to={`/contact?listing=${l.id}`} className="btn-primary flex-1">Contact</Link>
+                </div>
+                </div>
+            ))}
+            </div>
+        </section>
+
+        {/* Categories */}
+        <section className="space-y-4">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Browse by Category</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {categories.map(c => (
+                <Link
+                key={c.key}
+                to={c.link ? c.link : `/search?type=${c.key}`}
+                className="card text-center hover:-translate-y-0.5 transition"
+                >
+                <div
+                    className="text-3xl mb-2"
+                    style={{
+                    animation: 'gentle-bounce 1.2s infinite'
+                    }}
+                >
+                    {c.icon}
+                </div>
+                <div className="font-medium">{c.label}</div>
+                </Link>
+            ))}
+            </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="space-y-4">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">What users say</h2>
+            <div className="bg-peonyPink/40 rounded-2xl py-6 px-2 sm:px-6 overflow-x-auto scrollbar-hide">
+            <div
+                ref={carouselRef}
+                className="carousel pb-2"
+                style={{ paddingRight: '1rem', paddingLeft: '1rem' }}
+            >
+                {testimonials.map(t => (
+                <div
+                    key={t.id}
+                    className="snap-start min-w-[260px] sm:min-w-[320px] card bg-white/80"
+                    style={{ marginRight: '1rem' }}
+                >
+                    <div className="flex items-center gap-3 mb-2">
+                    <div className="h-10 w-10 rounded-full --color-primary text-white flex items-center justify-center font-semibold">{t.avatar}</div>
+                    <div className="font-medium">{t.name}</div>
+                    </div>
+                    <p className="text-gray-700">{t.text}</p>
+                </div>
+                ))}
+            </div>
+            </div>
+        </section>
+        {/* Tips section */}
+        <section className="space-y-4">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Tips for Renters & Owners</h2>
+            <ul className="list-disc pl-6 text-gray-700">
+            <li>Always verify listings before making payments.</li>
+            <li>Meet in safe, public places for viewings.</li>
+            <li>Keep your contact information up to date.</li>
+            </ul>
+        </section>
+        {/* Featured Cities */}
+        <section className="space-y-4">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Featured Cities</h2>
+            <div className="flex gap-4 flex-wrap">
+            {['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Hyderabad', 'Pune', 'Kolkata'].map(city => (
+                <div key={city} className="card px-6 py-3 font-medium text-[var(--color-primary)] bg-[var(--color-light)]">{city}</div>
+            ))}
+            </div>
+        </section>
+        </div>
+    )
+    }
+    export default function Dashboard() {
+    return (
+        <div className="space-y-6 w-full">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-[var(--color-primary)]">My Dashboard</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="card"><div className="text-sm text-gray-500">Active Listings</div><div className="text-2xl font-bold text-[var(--color-primary)]">3</div></div>
+            <div className="card"><div className="text-sm text-gray-500">Enquiries</div><div className="text-2xl font-bold text-[var(--color-primary)]">5</div></div>
+            <div className="card"><div className="text-sm text-gray-500">Bookings</div><div className="text-2xl font-bold text-[var(--color-primary)]">1</div></div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2 card">
+            <div className="font-medium mb-3">My Listings</div>
+            <div className="space-y-2">
+                {[1,2,3].map(i => (
+                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-white ring-1 ring-vainillaSuede/60">
+                    <div className="flex items-center gap-3">
+                    <img
+                        src={`https://source.unsplash.com/48x48/?property,apartment,house&sig=${i}`}
+                        alt="Listing"
+                        className="h-10 w-10 rounded-lg object-cover animate-pulse"
+                    />
+                    <div>
+                        <div className="font-medium">Listing #{i}</div>
+                        <div className="text-sm text-gray-600">City • INR {(i*20000).toLocaleString()}</div>
+                    </div>
+                    </div>
+                    <div className="flex gap-2">
+                    <button className="btn-secondary">Edit</button>
+                    <button className="btn-secondary">Delete</button>
+                    </div>
+                </div>
+                ))}
+            </div>
+            </div>
+            <div className="card">
+            <div className="font-medium mb-3">Recent Messages</div>
+            <div className="space-y-2">
+                {[1,2,3].map(i => (
+                <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-white ring-1 ring-vainillaSuede/60">
+                    <img
+                    src={`https://source.unsplash.com/40x40/?person,avatar&sig=${i}`}
+                    alt="User"
+                    className="h-8 w-8 rounded-full object-cover animate-bounce"
+                    />
+                    <div>
+                    <div className="text-sm font-medium">User {i}</div>
+                    <div className="text-sm text-gray-600 truncate">Is this still available?</div>
+                    </div>
+                </div>
+                ))}
+            </div>
+            </div>
+            <div className="card">
+            <div className="font-medium mb-3">Notifications</div>
+            <ul className="list-disc ml-4 text-sm text-gray-700">
+                <li>Your listing #2 received a new enquiry.</li>
+                <li>Booking confirmed for Listing #1.</li>
+                <li>Profile updated successfully.</li>
+            </ul>
+            </div>
+        </div>
+        <div className="mt-6 text-xs text-gray-500">
+            Tip: Keep your listings updated for better visibility and faster responses.
+        </div>
+        </div>
+    )
+    }
+    import { useState } from 'react'
+    import { saveListings, getListings } from '../mock'
+
+    export default function CreateListing() {
+    const [title, setTitle] = useState('')
+    const [price, setPrice] = useState('')
+    const [city, setCity] = useState('')
+    const [step, setStep] = useState(1)
+
+    function handleSubmit(e) {
+        e.preventDefault()
+        // Create new listing object
+        const newListing = {
+        id: Date.now().toString(),
+        ownerId: 'u1',
+        title,
+        description: '', // Add more fields as needed
+        type: 'room',
+        price: Number(price),
+        currency: 'INR',
+        address: '',
+        city,
+        bedrooms: 1,
+        bathrooms: 1,
+        amenities: [],
+        status: 'published',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        images: [],
+        }
+        const listings = getListings()
+        listings.push(newListing)
+        saveListings(listings)
+        alert(`Saved: ${title} - INR ${price} in ${city}`)
+    }
+
+    const steps = ['Basic Info','Location','Amenities','Images','Pricing','Preview']
+
+    // Calculate progress bar fill percentage
+    const minPercent = 1
+    const progressPercent =
+        step === 1
+        ? minPercent
+        : minPercent + ((step - 1) / (steps.length - 1)) * (100 - minPercent)
+
+    return (
+        <div className="w-full">
+        <h1 className="text-2xl sm:text-3xl font-semibold mb-6 text-[var(--color-primary)]">Create Listing</h1>
+
+        <div className="max-w-3xl mx-auto mb-4">
+            <div className="w-full bg-orchidSmoke rounded-full h-2 relative">
+            <div
+                className="h-2 rounded-full --color-primary"
+                style={{ width: `${progressPercent}%` }}
+            />
+            {/* Progress percentage */}
+            <span className="absolute right-0 top-[-22px] text-xs text-[var(--color-primary)] font-semibold">
+                {Math.round(progressPercent)}%
+            </span>
+            </div>
+            <div className="text-xs text-gray-500 mb-2">
+            Need help? <a href="/help" className="text-[var(--color-primary)] hover:underline">See our guide</a>
+            </div>
+            <div className="mt-2 text-sm text-gray-700">Step {step} of {steps.length}: {steps[step-1]}</div>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-3xl card mx-auto">
+            {/* Step hints */}
+
+            {step === 1 && (
+            <div className="space-y-4">
+                <div className="text-xs text-gray-500 mb-2">Enter a catchy title and select the property type.</div>
+                <div>
+                <label className="block text-sm text-gray-600 mb-1">Title</label>
+                <input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="input text-base"
+                    placeholder="Sunny Room"
+                />
+                </div>
+                <div>
+                <label className="block text-sm text-gray-600 mb-1">Type</label>
+                <select className="select text-base">
+                    <option>Room</option>
+                    <option>Flat</option>
+                    <option>House</option>
+                    <option>PG</option>
+                </select>
+                </div>
+            </div>
+            )}
+
+            {step === 2 && (
+            <div className="space-y-4">
+                <div className="text-xs text-gray-500 mb-2">Provide location details for better visibility.</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-sm text-gray-600 mb-1">City</label>
+                    <input
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="input text-base"
+                    placeholder="Mumbai"
+                    />
+                </div>
+                <div>
+                    <label className="block text-sm text-gray-600 mb-1">Address</label>
+                    <input className="input text-base" placeholder="Street, area" />
+                </div>
+                </div>
+                <div>
+                <label className="block text-sm text-gray-600 mb-1">Nearby places</label>
+                <input className="input text-base" placeholder="Parks, schools, transit" />
+                </div>
+            </div>
+            )}
+
+            {step === 3 && (
+            <div className="space-y-3">
+                <div className="text-xs text-gray-500 mb-2">Select amenities available in your property.</div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
+                {['AC','Wifi','Parking','Furnished','Lift'].map(a => (
+                    <label key={a} className="inline-flex items-center gap-2">
+                    <input type="checkbox" />
+                    <span>{a}</span>
+                    </label>
+                ))}
+                </div>
+            </div>
+            )}
+
+            {step === 4 && (
+            <div className="space-y-3">
+                <div className="text-xs text-gray-500 mb-2">Upload clear images to attract more renters.</div>
+                <div className="border-2 border-dashed rounded-xl p-6 text-center bg-orchidSmoke/40 animate-pulse">Drag & drop images here</div>
+                <div className="grid grid-cols-3 gap-3">
+                {[1,2,3].map(i => (
+                    <div key={i} className="aspect-square rounded bg-gray-200 overflow-hidden flex items-center justify-center">
+                    <img
+                        src={`https://source.unsplash.com/120x120/?house,interior,modern,architecture,realestate&sig=${i}`}
+                        alt="Preview"
+                        className="w-full h-full object-cover animate-bounce"
+                    />
+                    </div>
+                ))}
+                </div>
+            </div>
+            )}
+
+            {step === 5 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="text-xs text-gray-500 mb-2">Set a competitive price and availability status.</div>
+                <div>
+                <label className="block text-sm text-gray-600 mb-1">Price (INR)</label>
+                <input
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    className="input text-base"
+                    placeholder="45000"
+                />
+                </div>
+                <div>
+                <label className="block text-sm text-gray-600 mb-1">Availability</label>
+                <select className="select text-base">
+                    <option>Available</option>
+                    <option>Not available</option>
+                </select>
+                </div>
+            </div>
+            )}
+
+            {step === 6 && (
+            <div className="space-y-2 text-gray-700">
+                <div className="font-medium">Preview</div>
+                <div className="text-xs text-gray-500 mb-2">Review your listing before publishing.</div>
+                <div>Title: {title || '—'}</div>
+                <div>City: {city || '—'}</div>
+                <div>Price: {price || '—'}</div>
+            </div>
+            )}
+
+            <div className="flex flex-col sm:flex-row gap-2">
+            <button type="button" disabled={step===1} onClick={()=>setStep(s=>Math.max(1, s-1))} className="btn-secondary flex-1">Previous</button>
+            {step < steps.length ? (
+                <button type="button" onClick={()=>setStep(s=>Math.min(steps.length, s+1))} className="btn-secondary flex-1">Next</button>
+            ) : (
+                <button type="submit" className="btn-primary flex-1">Publish</button>
+            )}
+            </div>
+        </form>
+        </div>
+    )
+    }
+
+    export default function Contact() {
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+        <form className="lg:col-span-2 space-y-4 p-4 rounded-2xl bg-vainillaSuede ring-1 ring-vainillaSuede/60 shadow-soft">
+            <h1 className="text-2xl font-semibold text-gray-800">Contact us</h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+                <label className="block text-sm text-gray-700 mb-1">Name</label>
+                <input className="input" placeholder="Your name" />
+            </div>
+            <div>
+                <label className="block text-sm text-gray-700 mb-1">Email</label>
+                <input className="input" placeholder="you@example.com" />
+            </div>
+            </div>
+            <div>
+            <label className="block text-sm text-gray-700 mb-1">Message</label>
+            <textarea className="textarea" rows={5} placeholder="How can we help?" />
+            </div>
+            <button className="btn-primary">Send</button>
+        </form>
+        <aside className="space-y-4">
+            <div className="card flex items-center gap-3">
+            <img
+                src="https://source.unsplash.com/32x32/?contact,phone"
+                alt="Contact"
+                className="h-8 w-8 rounded-full object-cover animate-bounce"
+            />
+            <div>
+                <div className="font-medium">Contact info</div>
+                <div className="text-sm text-gray-700">Email: support@example.com</div>
+                <div className="text-sm text-gray-700">Phone: +91 90000 00000</div>
+            </div>
+            </div>
+            <div className="card">
+            <div className="text-sm text-gray-600 mb-2">Map</div>
+            <div className="aspect-video rounded bg-gray-200/70 flex items-center justify-center overflow-hidden">
+                <img
+                src="https://source.unsplash.com/400x225/?map,location"
+                alt="Map"
+                className="w-full h-full object-cover animate-pulse"
+                />
+            </div>
+            </div>
+            <div className="card">
+            <div className="font-medium mb-1">Office Hours</div>
+            <div className="text-sm text-gray-700">Mon-Fri: 9am - 6pm</div>
+            <div className="text-sm text-gray-700">Sat: 10am - 2pm</div>
+            </div>
+            <div className="card">
+            <div className="font-medium mb-1">Feedback</div>
+            <p className="text-sm text-gray-700">We value your feedback! <a href="mailto:feedback@example.com" className="text-frenchRose">Send us your thoughts.</a></p>
+            </div>
+        </aside>
+        </div>
+    )
+    }
+    import { useState } from 'react'
+
+    export default function Chat() {
+    const [active, setActive] = useState(1)
+    const [message, setMessage] = useState('')
+    const chats = [
+        { id: 1, name: 'Ayesha', last: 'See you tomorrow!' },
+        { id: 2, name: 'Omar', last: 'Thanks!' },
+        { id: 3, name: 'Sara', last: 'Is it available?' },
+        { id: 4, name: 'dev', last: 'Is it available?' },
+        { id: 5, name: 'Test', last: 'Is it available?' },
+        { id: 6, name: 'User6', last: 'Is it available?' },
+        { id: 7, name: 'User7', last: 'Is it available?' },
+        { id: 8, name: 'User8', last: 'Is it available?' },
+        { id: 9, name: 'User9', last: 'Is it available?' },
+        { id: 10, name: 'User10', last: 'Is it available?' },
+    
+    ]
+    const messages = [
+        { id: 1, from: 'me', text: 'Hello!' },
+        { id: 2, from: 'them', text: 'Hi, how can I help?' },
+        { id: 3, from: 'me', text: 'Interested in your listing.' },
+        { id: 4, from: 'them', text: 'Great! When would you like to visit?' },
+        { id: 5, from: 'me', text: 'Is it available?' },
+        { id: 6, from: 'them', text: 'Yes, it is.' },
+        { id: 7, from: 'me', text: 'Thanks!' },
+        { id: 8, from: 'them', text: 'See you tomorrow!' },
+        { id: 9, from: 'me', text: 'Looking forward to it.' },
+        { id: 10, from: 'them', text: 'Have a great day!' },
+    ]
+    function send() {
+        if (!message.trim()) return
+        setMessage('')
+    }
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 w-full">
+        <aside className="card p-0 overflow-hidden">
+            <div className="bg-peonyPink px-4 py-3 font-medium">Messages</div>
+            <div className="divide-y">
+            {chats.map(c => (
+                <button key={c.id} onClick={()=>setActive(c.id)} className={`w-full text-left px-4 py-3 hover:bg-vainillaSuede/50 ${active===c.id ? 'bg-vainillaSuede/60' : ''}`}>
+                <div className="flex items-center gap-2">
+                    <img
+                    src={`https://source.unsplash.com/32x32/?person,avatar&sig=${c.id}`}
+                    alt={c.name}
+                    className="h-8 w-8 rounded-full object-cover animate-bounce"
+                    />
+                    <div>
+                    <div className="font-medium">{c.name}</div>
+                    <div className="text-sm text-gray-600 truncate">{c.last}</div>
+                    </div>
+                </div>
+                </button>
+            ))}
+            </div>
+        </aside>
+        <section className="card p-0 overflow-hidden flex flex-col">
+            <div className="px-4 py-3 border-b flex items-center justify-between">
+            <div className="font-medium">Chat with {chats.find(c=>c.id===active)?.name}</div>
+            </div>
+            <div className="flex-1 p-4 space-y-2 bg-white">
+            {messages.map(m => (
+                <div key={m.id} className={`max-w-[70%] px-3 py-2 rounded-lg ${m.from==='me' ? 'ml-auto bg-peonyPink' : 'bg-mistflower'}`}>{m.text}</div>
+            ))}
+            </div>
+            <div className="p-3 border-t flex gap-2">
+            <input className="input flex-1" placeholder="Write a message" value={message} onChange={(e)=>setMessage(e.target.value)} />
+            <button onClick={send} className="btn-primary">Send</button>
+            <button type="button" className="btn-secondary">Attach</button>
+            </div>
+            <div className="px-4 py-2 text-xs text-gray-500 border-t">
+            Tip: Be polite and keep communication safe. Never share sensitive info.
+            </div>
+        </section>
+        </div>
+    )
+    }
